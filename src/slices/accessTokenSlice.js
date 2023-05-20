@@ -29,7 +29,6 @@ export const getAccessToken = createAsyncThunk(
     
     const isTokenValid = checkIfTokenIsValid(accessToken, expiredAt);
 
-    console.log('isTokenValid', isTokenValid);
 
     if (isTokenValid) {
       return { expiredAt, accessToken }
@@ -69,7 +68,6 @@ const accessTokenSlice = createSlice({
         state.error = null;
       })
       .addCase(getAccessToken.fulfilled, (state, action) => {
-        console.log('fulfilled payload', action.payload);
         
         state.accessToken = action.accessToken;
         state.expiredAt = action.expiredAt;
