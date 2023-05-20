@@ -6,11 +6,9 @@ const useInitialVacancies = () => {
     const dispatch = useDispatch();
     const accessTokenLoadingStatus = useSelector(state => state.accessTokens.loadingStatus);
 
-    console.log('accessTokenLoadingStatus', accessTokenLoadingStatus);
 
     useEffect(() => {
         if (accessTokenLoadingStatus === 'succeed') {
-            console.log('initial get vacancies');
             dispatch(getVacancies());
         }
     }, [accessTokenLoadingStatus]);

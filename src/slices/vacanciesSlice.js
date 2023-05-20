@@ -12,28 +12,16 @@ import initSearchParams from '../api/queryParams/searchParameters';
     'vacancies/getVacancies',
     async (searchParams = initialSearchParams, thunkApi) => {
       const state = thunkApi.getState();
-
-      console.log('vacancies/getVacancies state.accessTokens.accessToken', state);
-
       const accessToken = state.accessTokens.accessToken
+
       const authorization = {
-        'Authorization': 'Bearer' `${accessToken}`
+        'Authorization': `Bearer ${accessToken}`,
       }
+      const response = await axiosInstance.get(routes.vacanciesPath(),{ headers: authorization, params : {...searchParams}})
 
-      let response;
-
-      try {
-        response = await axiosInstance.get(routes.searchPath(),{ headers: authorization, params : {...searchParams}})
-
-      } catch(err) {
-
-        console.error(err);
-      }
-      
-      
       console.log('response', response);
 
-      return {}
+      return
     },
   );
 
@@ -51,7 +39,6 @@ import initSearchParams from '../api/queryParams/searchParameters';
           state.error = null;
         })
         .addCase(getVacancies.rejected, (state, action) => {
-          console.log('NOT')
           state.loadingStatus = 'failed';
           state.error = action.error;
         });
