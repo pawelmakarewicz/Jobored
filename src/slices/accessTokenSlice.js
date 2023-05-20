@@ -29,22 +29,18 @@ export const getAccessToken = createAsyncThunk(
     
     const isTokenValid = checkIfTokenIsValid(accessToken, expiredAt);
 
-
     if (isTokenValid) {
       return { expiredAt, accessToken }
     }
 
-    const response = await axiosInstance.get(routes.loginPath(), {params : {loginParameters}})
+    const response = await axiosInstance.get(routes.loginPath(), {params : {...loginParameters}})
     
-    console.log(`response`, JSON.stringify(response.data, null, 2));
-
     const { access_token, expires_in } = response.data;
 
     const payload = { expiredAt: calculateExpiredAtTimestamp(expires_in), accessToken: access_token }
 
     localStorage.setItem(ACCESS_TOKEN_KEY, payload.accessToken);
     localStorage.setItem(EXPIRED_AT_KEY, payload.expiredAt);
-    
     return payload;
   },
 );
