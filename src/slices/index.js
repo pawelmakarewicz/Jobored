@@ -4,7 +4,7 @@ import accessTokenReducer from './accessTokenSlice'
 
 export default configureStore({
   reducer: {
-    vacancies: vacanciesReducer,
-    accessTokens: accessTokenReducer
+    accessTokens: accessTokenReducer,
+    vacancies: vacanciesReducer
   },
 });

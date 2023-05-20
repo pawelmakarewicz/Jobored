@@ -1,4 +1,4 @@
-import  loginParameters  from '../api/loginParameters'
+import  loginParameters  from '../api/queryParams/loginParameters'
 import routes from '../api/routes'
 import { createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/toolkit';
 import axiosInstance from '../api/axiosInstance';
@@ -56,11 +56,12 @@ const accessTokenSlice = createSlice({
       })
       .addCase(getAccessToken.fulfilled, (state, action) => {
         
-        state.accessToken = action.accessToken;
-        state.expiredAt = action.expiredAt;
+        state.accessToken = action.payload.accessToken;
+        state.expiredAt = action.payload.expiredAt;
 
-        state.loadingStatus = 'idle';
+        state.loadingStatus = 'succeed';
         state.error = null;
+
       })
       .addCase(getAccessToken.rejected, (state, action) => {
         state.loadingStatus = 'failed';
