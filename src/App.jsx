@@ -1,11 +1,11 @@
+import { MantineProvider } from '@mantine/core';
+import { useDispatch } from 'react-redux';
+import { useEffect } from 'react';
 import FormFilter from './components/FormFilter';
 import HeaderSimple from './components/Header';
 import VacanciesList from './components/VacanciesList';
-import setTheme from './myTheme.js';
-import { MantineProvider } from '@mantine/core';
-import { useDispatch } from 'react-redux';
-import { getAccessToken } from './slices/accessTokenSlice'
-import { useEffect } from 'react';
+import setTheme from './myTheme';
+import { getAccessToken } from './slices/accessTokenSlice';
 
 function App() {
   const dispatch = useDispatch();
@@ -15,12 +15,11 @@ function App() {
 
   return (
     <MantineProvider withGlobalStyles withNormalizeCSS theme={setTheme()}>
-        <HeaderSimple/>
-        <FormFilter/>
-        <VacanciesList />
+      <HeaderSimple />
+      <FormFilter />
+      <VacanciesList />
     </MantineProvider>
   );
 }
 
 export default App;
-
