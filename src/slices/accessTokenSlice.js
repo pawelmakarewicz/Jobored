@@ -1,7 +1,7 @@
-import  query  from '../api/loginParameters'
+import  loginParameters  from '../api/loginParameters'
 import routes from '../api/routes'
-import axios from 'axios';
 import { createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/toolkit';
+import axiosInstance from '../api/axiosInstance';
 
 const ACCESS_TOKEN_KEY = 'accessToken';
 const EXPIRED_AT_KEY = 'expiredAt';
@@ -34,18 +34,9 @@ export const getAccessToken = createAsyncThunk(
       return { expiredAt, accessToken }
     }
 
-    const url = new URL(routes.loginPath());
-    query.forEach((searchParameter) => {
-      url.searchParams.append(searchParameter.key, searchParameter.value)
-    })
-    const headerData = {
-      headers:{
-        'x-secret-key': 'GEU4nvd3rej*jeh.eqp'
-      }
-    }
-    const response = await axios.get(url.toString(), headerData)
+    const response = await axiosInstance.get(routes.loginPath(), {params : {loginParameters}})
     
-    console.log(`${url.toString()} response`, JSON.stringify(response.data, null, 2));
+    console.log(`response`, JSON.stringify(response.data, null, 2));
 
     const { access_token, expires_in } = response.data;
 

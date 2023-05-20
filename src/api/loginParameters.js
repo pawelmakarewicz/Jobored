@@ -1,4 +1,4 @@
-const query =  [
+const loginParameters =  [
     {
       key: "login",
       value: "sergei.stralenia@gmail.com"
@@ -21,4 +21,4 @@ const query =  [
     }
   ]
 
-  export default query
+  export default loginParameters
