@@ -1,12 +1,12 @@
-import { createSlice, createEntityAdapter, createAsyncThunk } from '@reduxjs/toolkit';
+/* eslint-disable camelcase */
+/* eslint-disable no-param-reassign */
+import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import loginParameters from '../api/queryParams/loginParameters';
 import routes from '../api/routes';
 import axiosInstance from '../api/axiosInstance';
 
 const ACCESS_TOKEN_KEY = 'accessToken';
 const EXPIRED_AT_KEY = 'expiredAt';
-
-const accessTokenAdapter = createEntityAdapter();
 
 function calculateExpiredAtTimestamp(expiresInSeconds) {
   const ms = expiresInSeconds * 1000;
@@ -33,10 +33,13 @@ export const getAccessToken = createAsyncThunk(
       return { expiredAt, accessToken };
     }
 
+    // eslint-disable-next-line max-len
     const response = await axiosInstance.get(routes.loginPath(), { params: { ...loginParameters } });
 
-    const { access_token, expires_in } = response.data;
+    const { data } = response;
+    const { access_token, expires_in } = data;
 
+    // eslint-disable-next-line max-len
     const payload = { expiredAt: calculateExpiredAtTimestamp(expires_in), accessToken: access_token };
 
     localStorage.setItem(ACCESS_TOKEN_KEY, payload.accessToken);
@@ -47,9 +50,9 @@ export const getAccessToken = createAsyncThunk(
 
 const accessTokenSlice = createSlice({
   name: 'accessTokens',
-  initialState: accessTokenAdapter.getInitialState({
+  initialState: {
     accessToken: null, expiredAt: null, loadingStatus: 'idle', error: null,
-  }),
+  },
   extraReducers: (builder) => {
     builder
       .addCase(getAccessToken.pending, (state) => {

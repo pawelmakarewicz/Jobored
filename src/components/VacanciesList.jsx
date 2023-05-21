@@ -1,6 +1,10 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import {
+  List,
+} from '@mantine/core';
 import { getVacancies } from '../slices/vacanciesSlice';
+import Vacancy from './Vacancy';
 
 const useInitialVacancies = () => {
   const dispatch = useDispatch();
@@ -13,13 +17,17 @@ const useInitialVacancies = () => {
   }, [accessTokenLoadingStatus]);
 };
 
-function VacanciesList(props) {
+function VacanciesList() {
   useInitialVacancies();
-
-  // TODO: subscribe to vacansies and render
-  // useSelector(state => state.vacancies);
-
-  return <div>TODO: render vacancies</div>;
+  const vacanciesList = useSelector((state) => state.vacancies.entities);
+  const vacancies = Object.entries(vacanciesList);
+  return (
+    <List>
+      {vacancies.map(([id, data]) => (
+        <List.Item key={id}><Vacancy vacancyData={data} /></List.Item>
+      ))}
+    </List>
+  );
 }
 
 export default VacanciesList;
