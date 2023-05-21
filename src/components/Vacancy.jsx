@@ -3,7 +3,7 @@ import {
 } from '@mantine/core';
 /* eslint-disable camelcase */
 
-function setSalary(salaryFrom, salaryTo) {
+function getSalary(salaryFrom, salaryTo) {
   if (salaryFrom === 0 && salaryTo === 0) {
     return null;
   }
@@ -20,7 +20,7 @@ function setSalary(salaryFrom, salaryTo) {
   if (salaryTo === salaryFrom) {
     value = `${salaryFrom}`;
   }
-  return `з/п ${value} rub`;
+  return <Text>{`з/п ${value} rub`}</Text>;
 }
 
 function Vacancy(props) {
@@ -30,11 +30,14 @@ function Vacancy(props) {
   } = vacancyData;
   const paymentFrom = Number(payment_from);
   const paymentTo = Number(payment_to);
+  const typeOfWork = Object.create(type_of_work);
+  const addressData = address ? <Text>{address}</Text> : null;
   return (
     <>
       <Title order={2}>{profession}</Title>
-      <Text>{address}</Text>
-      <Text>{setSalary(paymentFrom, paymentTo)}</Text>
+      {getSalary(paymentFrom, paymentTo)}
+      {addressData}
+      <Text>{typeOfWork.title}</Text>
     </>
 
   );

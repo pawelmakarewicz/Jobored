@@ -18,7 +18,14 @@ export const getVacancies = createAsyncThunk(
       Authorization: `Bearer ${accessToken}`,
     };
     // eslint-disable-next-line max-len
-    const response = await axiosInstance.get(routes.vacanciesPath(), { headers: authorization, params: { ...searchParams } });
+    let response;
+    try {
+      // eslint-disable-next-line max-len
+      response = await axiosInstance.get(routes.vacanciesPath(), { headers: authorization, params: { ...searchParams } });
+    } catch (err) {
+      console.error('server');
+    }
+
     const { objects } = response.data;
     const payload = objects.map(({
       id, profession, payment_from, payment_to, type_of_work, address,

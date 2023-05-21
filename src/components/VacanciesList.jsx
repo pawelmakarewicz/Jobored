@@ -24,7 +24,7 @@ function VacanciesList() {
   return (
     <List>
       {vacancies.map(([id, data]) => (
-        <List.Item key={id}><Vacancy vacancyData={data} /></List.Item>
+        <List.Item key={id}><Vacancy vacancyData={data} handleSubmit /></List.Item>
       ))}
     </List>
   );
