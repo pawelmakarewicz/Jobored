@@ -1,12 +1,12 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
+  keyword: '',
   paramsFilter: {
     paymentFrom: '',
     paymentTo: '',
     catalogues: '',
   },
-  keyWordParams: '',
 };
 
 const searchParamsSlice = createSlice({
@@ -17,9 +17,13 @@ const searchParamsSlice = createSlice({
       // eslint-disable-next-line no-param-reassign
       state.paramsFilter = { ...state.paramsFilter, ...action.payload };
     },
+    setKeyWord: (state, action) => {
+      // eslint-disable-next-line no-param-reassign
+      state.keyword = action.payload;
+    },
   },
 });
 
-export const { setFilters } = searchParamsSlice.actions;
+export const { setFilters, setKeyWord } = searchParamsSlice.actions;
 
 export default searchParamsSlice.reducer;

@@ -12,7 +12,6 @@ export const getCatalogues = createAsyncThunk(
       Authorization: `Bearer ${accessToken}`,
     };
     const response = await axiosInstance.get(routes.cataloguesPath(), { headers: authorization });
-    console.log('responceDtata', response.data);
 
     const payload = response.data.map(({
       // eslint-disable-next-line camelcase

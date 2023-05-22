@@ -32,7 +32,7 @@ const useStyles = createStyles((theme) => ({
 
 const links = [{ link: '123', label: 'Вакансии' }, { link: '45', label: 'Избранное' }];
 
-export default function HeaderSimple(props) {
+export default function HeaderSimple() {
   const [active, setActive] = useState(links[0].link);
   const { classes, cx } = useStyles();
   const items = links.map((link) => (
