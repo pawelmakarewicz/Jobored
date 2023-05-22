@@ -1,6 +1,7 @@
 import {
   Title, Text,
 } from '@mantine/core';
+import { Link } from 'react-router-dom';
 /* eslint-disable camelcase */
 
 function getSalary(salaryFrom, salaryTo) {
@@ -25,12 +26,13 @@ function getSalary(salaryFrom, salaryTo) {
 
 function Vacancy(props) {
   const { vacancyData } = props;
+
   const {
-    profession, payment_from, payment_to, type_of_work, address,
+    profession, payment_from, payment_to, type_of_work, address, id
   } = vacancyData;
   const paymentFrom = Number(payment_from);
   const paymentTo = Number(payment_to);
-  const typeOfWork = Object.create(type_of_work);
+  const typeOfWork = type_of_work;
   const addressData = address ? <Text>{address}</Text> : null;
   return (
     <>
@@ -38,8 +40,8 @@ function Vacancy(props) {
       {getSalary(paymentFrom, paymentTo)}
       {addressData}
       <Text>{typeOfWork.title}</Text>
+      <Link to={`/${id}`}>{id}</Link>
     </>
-
   );
 }
 export default Vacancy;

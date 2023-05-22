@@ -10,21 +10,17 @@ const vacanciesAdapter = createEntityAdapter();
 export const getVacancies = createAsyncThunk(
   'vacancies/getVacancies',
   // eslint-disable-next-line default-param-last
-  async (additionalSearchParams = {}, thunkApi) => {
+  async (_, thunkApi) => {
     const state = thunkApi.getState();
     const { accessToken } = state.accessTokens;
-    const searchParams = initSearchParams(additionalSearchParams);
+    const { params } = state.searchParams;
+    const searchParams = initSearchParams(params);
     const authorization = {
       Authorization: `Bearer ${accessToken}`,
     };
     // eslint-disable-next-line max-len
-    let response;
-    try {
-      // eslint-disable-next-line max-len
-      response = await axiosInstance.get(routes.vacanciesPath(), { headers: authorization, params: { ...searchParams } });
-    } catch (err) {
-      console.error('server');
-    }
+
+    const response = await axiosInstance.get(routes.vacanciesPath(), { headers: authorization, params: { ...searchParams } });
 
     const { objects } = response.data;
     const payload = objects.map(({
@@ -38,7 +34,7 @@ export const getVacancies = createAsyncThunk(
 
 const vacanciesSlice = createSlice({
   name: 'vacancies',
-  initialState: vacanciesAdapter.getInitialState({ loadingStatus: 'idle', error: null }),
+  initialState: vacanciesAdapter.getInitialState({ loadingStatus: 'idle', error: null, favouriteVacancies: [] }),
   extraReducers: (builder) => {
     builder
       .addCase(getVacancies.pending, (state) => {
@@ -46,7 +42,7 @@ const vacanciesSlice = createSlice({
         state.error = null;
       })
       .addCase(getVacancies.fulfilled, (state, action) => {
-        vacanciesAdapter.addMany(state, action.payload);
+        vacanciesAdapter.setAll(state, action.payload);
         state.loadingStatus = 'idle';
         state.error = null;
       })
