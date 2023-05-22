@@ -1,14 +1,12 @@
-import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-
-import { getVacancies } from './vacanciesSlice';
+import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  params: {
+  paramsFilter: {
     paymentFrom: '',
     paymentTo: '',
     catalogues: '',
-    search: '',
   },
+  keyWordParams: '',
 };
 
 const searchParamsSlice = createSlice({
@@ -16,7 +14,7 @@ const searchParamsSlice = createSlice({
   initialState,
   reducers: {
     setFilters: (state, action) => {
-      state.params = { ...state.params, ...action.payload };
+      state.paramsFilter = { ...state.paramsFilter, ...action.payload };
     },
   },
 });
