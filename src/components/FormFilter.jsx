@@ -27,7 +27,11 @@ export default function FormFilter() {
           <Text fz="xs">Сбросить все</Text>
         </Button>
       </Group>
-      <form onSubmit={(() => { dispatch(getVacancies()); })}>
+      <form onSubmit={((e) => {
+        e.preventDefault();
+        dispatch(getVacancies());
+      })}
+      >
         <List>
           <List.Item>
             <Group position="left" mt="md">

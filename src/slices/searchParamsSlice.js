@@ -15,6 +15,7 @@ const searchParamsSlice = createSlice({
   reducers: {
     setFilters: (state, action) => {
       state.paramsFilter = { ...state.paramsFilter, ...action.payload };
+      console.log('setFilters', state.paramsFilter);
     },
   },
 });

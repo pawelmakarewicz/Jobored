@@ -13,8 +13,10 @@ export const getVacancies = createAsyncThunk(
   async (_, thunkApi) => {
     const state = thunkApi.getState();
     const { accessToken } = state.accessTokens;
-    const { params } = state.searchParams;
-    const searchParams = initSearchParams(params);
+    const { paramsFilter, keyWordParams } = state.searchParams;
+    console.log('state.searchParams', state.searchParams);
+    const searchParams = initSearchParams({ ...paramsFilter, ...keyWordParams });
+    console.log('searchParams', searchParams);
     const authorization = {
       Authorization: `Bearer ${accessToken}`,
     };
