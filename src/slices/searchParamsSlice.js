@@ -14,8 +14,8 @@ const searchParamsSlice = createSlice({
   initialState,
   reducers: {
     setFilters: (state, action) => {
+      // eslint-disable-next-line no-param-reassign
       state.paramsFilter = { ...state.paramsFilter, ...action.payload };
-      console.log('setFilters', state.paramsFilter);
     },
   },
 });

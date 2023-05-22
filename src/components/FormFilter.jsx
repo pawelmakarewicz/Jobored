@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import {
   Text, NumberInput, List, Select, Button, Group, Title, Box,
 } from '@mantine/core';
@@ -5,8 +6,11 @@ import { IconChevronDown, IconX } from '@tabler/icons-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setFilters } from '../slices/searchParamsSlice';
 import { getVacancies } from '../slices/vacanciesSlice';
+import { getCatalogues } from '../slices/catalogueSlice';
 
-const dataFromState = ['React', 'Angular', 'Svelte', 'Vue'];
+function findKey(selectedTitle, catalogues) {
+  return catalogues.find(({ titleTrimmed }) => titleTrimmed === selectedTitle).key;
+}
 
 const emptyFilter = {
   paymentFrom: '',
@@ -14,10 +18,25 @@ const emptyFilter = {
   catalogues: '',
 };
 
+const useInitialCatalogue = () => {
+  const dispatch = useDispatch();
+  const accessTokenLoadingStatus = useSelector((state) => state.accessTokens.loadingStatus);
+
+  useEffect(() => {
+    if (accessTokenLoadingStatus === 'succeed') {
+      dispatch(getCatalogues());
+    }
+  }, [accessTokenLoadingStatus]);
+};
+
 export default function FormFilter() {
+  useInitialCatalogue();
   const dispatch = useDispatch();
   const filterData = useSelector((state) => state.searchParams.paramsFilter);
-  const { paymentFrom, paymentTo, catalogues } = filterData;
+  const catalogues = useSelector((state) => state.catalogues.cataloguesData) || [];
+
+  const catalogueNames = catalogues.map(({ titleTrimmed }) => titleTrimmed);
+  const { paymentFrom, paymentTo } = filterData;
 
   return (
     <Box p={20} maw={315}>
@@ -42,8 +61,9 @@ export default function FormFilter() {
               rightSection={<IconChevronDown size="1rem" />}
               rightSectionWidth={30}
               styles={{ rightSection: { pointerEvents: 'none' } }}
-              data={dataFromState}
-              onChange={(e) => { console.log(e); }}
+              data={catalogueNames}
+              // eslint-disable-next-line max-len
+              onChange={(e) => { dispatch(setFilters({ catalogues: Number(findKey(e, catalogues)) })); }}
             />
           </List.Item>
           <List.Item>
