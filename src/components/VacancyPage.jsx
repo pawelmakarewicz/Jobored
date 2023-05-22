@@ -6,7 +6,6 @@ export async function vacancyPageLoader({ params }) {
 
 export default function VacancyPage() {
   const vacancyId = useLoaderData();
-  console.log('VacancyPage props', vacancyId);
 
   return <div>TODO: add</div>;
 }

@@ -7,6 +7,8 @@ import {
   useLoaderData,
 } from 'react-router-dom';
 import VacanciesPage from './components/VacanciesPage';
+import FavouritesPage from './components/FavouritesPage';
+
 import VacancyPage, { vacancyPageLoader } from './components/VacancyPage';
 
 import HeaderSimple from './components/Header';
@@ -24,6 +26,10 @@ const router = createBrowserRouter([
     element: <VacancyPage />,
     loader: vacancyPageLoader,
   },
+  {
+    path: '/favourites',
+    element: <FavouritesPage />,
+  }
 ]);
 
 function App() {

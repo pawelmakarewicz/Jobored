@@ -5,6 +5,7 @@ const renameDict = {
   catalogue: 'catalogues',
   keyword: 'keyword',
   noAgreement: 'no_agreement',
+  ids: 'ids',
 };
 
 function setSearchParamsApi(params) {

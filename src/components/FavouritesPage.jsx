@@ -4,44 +4,36 @@ import { useDispatch, useSelector } from 'react-redux';
 import FormFilter from './FormFilter';
 import VacanciesList from './VacanciesList';
 import SearchInput from './SearchInput';
-import { getVacancies, loadFavouritesList } from '../slices/vacanciesSlice';
+import { loadFavouritesVacancies } from '../slices/vacanciesSlice';
 
-const useInitialVacancies = () => {
+const useFavouriteVacancies = () => {
   const dispatch = useDispatch();
   const accessTokenLoadingStatus = useSelector((state) => state.accessTokens.loadingStatus);
+  const vacancies = useSelector((state) => state.vacancies.vacancies);
 
   useEffect(() => {
     if (accessTokenLoadingStatus === 'succeed') {
-      dispatch(getVacancies());
+      dispatch(loadFavouritesVacancies());
     }
   }, [accessTokenLoadingStatus]);
+
+  return vacancies;
 };
 
-const useLoadFavourites = () => {
-  const dispatch = useDispatch();
+function FavouritesPage() {
+  const vacancies = useFavouriteVacancies();
 
-  useEffect(() => {
-    dispatch(loadFavouritesList());
-  }, []);
-};
-
-function VacanciesPage() {
-  useInitialVacancies();
-  useLoadFavourites();
-
-  const vacanciesList = useSelector((state) => state.vacancies.vacancies);
-  
   return (
     <Center>
       <Group maw={1115} align="top">
         <FormFilter />
         <Group maw={770} align="top">
           <SearchInput />
-          <VacanciesList vacancies={vacanciesList} />
+          <VacanciesList vacancies={vacancies} />
         </Group>
       </Group>
     </Center>
   );
 }
 
-export default VacanciesPage;
+export default FavouritesPage;
