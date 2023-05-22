@@ -7,6 +7,10 @@ import initSearchParams from '../api/queryParams/searchParameters';
 
 const vacanciesAdapter = createEntityAdapter();
 
+function calculateNoAgreement(paramsFilter) {
+  return (paramsFilter.paymentFrom || paramsFilter.paymentTo) ? 1 : null;
+}
+
 export const getVacancies = createAsyncThunk(
   'vacancies/getVacancies',
   // eslint-disable-next-line default-param-last
@@ -14,7 +18,7 @@ export const getVacancies = createAsyncThunk(
     const state = thunkApi.getState();
     const { accessToken } = state.accessTokens;
     const { keyword, paramsFilter } = state.searchParams;
-    const searchParams = initSearchParams({ keyword, ...paramsFilter });
+    const searchParams = initSearchParams({ keyword, ...paramsFilter, noAgreement: calculateNoAgreement(paramsFilter) });
     const authorization = {
       Authorization: `Bearer ${accessToken}`,
     };

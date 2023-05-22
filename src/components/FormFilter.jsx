@@ -8,14 +8,10 @@ import { setFilters } from '../slices/searchParamsSlice';
 import { getVacancies } from '../slices/vacanciesSlice';
 import { getCatalogues } from '../slices/catalogueSlice';
 
-function findKey(selectedTitle, catalogues) {
-  return catalogues.find(({ titleTrimmed }) => titleTrimmed === selectedTitle).key;
-}
-
 const emptyFilter = {
   paymentFrom: '',
   paymentTo: '',
-  catalogues: '',
+  catalogue: '',
 };
 
 const useInitialCatalogue = () => {
@@ -33,9 +29,9 @@ export default function FormFilter() {
   useInitialCatalogue();
   const dispatch = useDispatch();
   const filterData = useSelector((state) => state.searchParams.paramsFilter);
-  const catalogues = useSelector((state) => state.catalogues.cataloguesData) || [];
+  const cataloguesData = useSelector((state) => state.catalogues.cataloguesData) || [];
 
-  const catalogueNames = catalogues.map(({ titleTrimmed }) => titleTrimmed);
+  const catalogueOptions = cataloguesData.map(({ titleTrimmed, key }) => ({ value: key, label: titleTrimmed }));
   const { paymentFrom, paymentTo } = filterData;
 
   return (
@@ -61,9 +57,12 @@ export default function FormFilter() {
               rightSection={<IconChevronDown size="1rem" />}
               rightSectionWidth={30}
               styles={{ rightSection: { pointerEvents: 'none' } }}
-              data={catalogueNames}
+              data={catalogueOptions}
+              value={filterData.catalogue}
               // eslint-disable-next-line max-len
-              onChange={(e) => { dispatch(setFilters({ catalogues: Number(findKey(e, catalogues)) })); }}
+              onChange={(value) => {
+                dispatch(setFilters({ catalogue: value }));
+              }}
             />
           </List.Item>
           <List.Item>

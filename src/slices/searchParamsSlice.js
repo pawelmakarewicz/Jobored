@@ -5,7 +5,7 @@ const initialState = {
   paramsFilter: {
     paymentFrom: '',
     paymentTo: '',
-    catalogues: '',
+    catalogue: '',
   },
 };
 

@@ -1,22 +1,26 @@
-import { snakeCase } from 'lodash';
-
-function isSalaryParamsPresent(params) {
-  return Object.prototype.hasOwnProperty.call(params, 'payment_from') || Object.prototype.hasOwnProperty.call(params, 'payment_to');
-}
+const renameDict = {
+  published: 'published',
+  paymentFrom: 'payment_from',
+  paymentTo: 'payment_to',
+  catalogue: 'catalogues',
+  keyword: 'keyword',
+  noAgreement: 'no_agreement',
+};
 
 function setSearchParamsApi(params) {
-  // eslint-disable-next-line no-unused-vars, max-len
-  const apiParams = Object.fromEntries(Object.entries(params).filter(([_, v]) => v).map(([key, value]) => [snakeCase(key), value]));
-  if (isSalaryParamsPresent(apiParams)) {
-    return { no_agreement: 1, ...apiParams };
-  }
-  return apiParams;
+  const searchParams = {};
+  Object.keys(params).forEach((param) => {
+    const key = renameDict[param];
+    const value = params[param];
+    if (value) {
+      searchParams[key] = value;
+    }
+  });
+  return searchParams;
 }
 
-function initSearchParams(searchParamsFromFilters) {
-  const initialSearchParams = { published: '1' };
-  const additionalSearchParams = setSearchParamsApi(searchParamsFromFilters);
-  return { ...initialSearchParams, ...additionalSearchParams };
+function initSearchParams(searchParamsFromFilters, defaultSearchParams = { published: '1' }) {
+  return setSearchParamsApi({ ...defaultSearchParams, ...searchParamsFromFilters });
 }
 
 export default initSearchParams;
