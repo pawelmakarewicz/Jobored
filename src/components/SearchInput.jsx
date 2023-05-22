@@ -10,11 +10,12 @@ export default function SearchInput() {
     <form onSubmit={((e) => {
       e.preventDefault();
       dispatch(getVacancies());
+      dispatch((setKeyWord('')));
     })}
     >
       <Group position="center" mt="md">
         <TextInput placeholder="Введите название вакансии" value={filterData} onChange={(e) => { dispatch(setKeyWord(e.currentTarget.value)); }} variant="unstyled" />
-        <Button type="submit" style={{ width: '100%' }}>Применить</Button>
+        <Button type="submit">Применить</Button>
       </Group>
     </form>
   );
