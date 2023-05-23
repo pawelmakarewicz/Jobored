@@ -1,6 +1,6 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import {
-  createStyles, Header, Container, Group, rem, Image, Text,
+  createStyles, Header, Container, Text, Group, Image,
 } from '@mantine/core';
 
 const useStyles = createStyles((theme) => ({
@@ -13,10 +13,10 @@ const useStyles = createStyles((theme) => ({
   link: {
     display: 'block',
     lineHeight: 1,
-    padding: `${rem(8)} ${rem(12)}`,
+    padding: `${theme.spacing.xs} ${theme.spacing.sm}`,
     borderRadius: theme.radius.sm,
     textDecoration: 'none',
-    color: theme.black,
+    color: theme.colors.dark,
     '&:hover': {
       backgroundColor: theme.colors.gray[0],
     },
@@ -27,6 +27,15 @@ const useStyles = createStyles((theme) => ({
   logo: {
     fontFamily: 'Poppins, sans-serif',
     fontSize: '1.5rem',
+    fontWeight: 600,
+    marginLeft: theme.spacing.xs,
+    display: 'flex',
+    alignItems: 'center',
+  },
+  logoImage: {
+    marginRight: theme.spacing.xs,
+    width: '30px',
+    height: '30px',
   },
 }));
 
@@ -48,11 +57,14 @@ export default function HeaderSimple() {
       {link.label}
     </a>
   ));
+
   return (
     <Header height={84} mb={40}>
-      <Container className={classes.header}>
-        {/* <Image src="../public/logo.svg" alt="Logo" />  */}
-        <Text className={classes.logo}>Jobored</Text>
+      <Container className={classes.header} maw={700}>
+        <div className={classes.logo}>
+          <Image src="/logo.svg" alt="Logo" className={classes.logoImage} />
+          <Text>Jobored</Text>
+        </div>
         <Group spacing={5} className={classes.links}>
           {items}
         </Group>
