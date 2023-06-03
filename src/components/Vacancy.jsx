@@ -31,14 +31,11 @@ function Vacancy(props) {
   const { vacancyData } = props;
 
   const {
-    profession, payment_from, payment_to, type_of_work, address, id,
+    profession, paymentFrom, paymentTo, typeOfWork, address, id,
   } = vacancyData;
 
-  const isSaved = useSelector((state) => state.vacancies.favouriteVacancies.find((fv) => fv === id));
+  const isSaved = useSelector((state) => state.vacancies.favouriteVacancies.includes(id));
 
-  const paymentFrom = Number(payment_from);
-  const paymentTo = Number(payment_to);
-  const typeOfWork = type_of_work;
   const addressData = address ? <Text>{address}</Text> : null;
   return (
     <>
@@ -47,7 +44,11 @@ function Vacancy(props) {
       {addressData}
       <Text>{typeOfWork.title}</Text>
       <Link to={`/${id}`}>{id}</Link>
-      <Checkbox onChange={() => dispatch(toggleSaveVacancy(id))} value={id} checked={isSaved} />
+      <Checkbox
+        onChange={() => dispatch(toggleSaveVacancy(id))}
+        value={id}
+        checked={isSaved}
+      />
     </>
   );
 }

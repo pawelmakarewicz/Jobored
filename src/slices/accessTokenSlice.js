@@ -35,7 +35,10 @@ export const getAccessToken = createAsyncThunk(
 
     // eslint-disable-next-line max-len
 
-    const response = await axiosInstance.get(routes.loginPath(), { params: { ...loginParameters } });
+    const response = await axiosInstance.get(
+      routes.loginPath(),
+      { params: { ...loginParameters } },
+    );
 
     const { data } = response;
     const { access_token, expires_in } = data;

@@ -30,7 +30,7 @@ function VacanciesPage() {
   useLoadFavourites();
 
   const vacanciesList = useSelector((state) => state.vacancies.vacancies);
-  
+
   return (
     <Center>
       <Group maw={1115} align="top">
