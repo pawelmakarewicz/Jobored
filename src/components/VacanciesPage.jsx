@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import FormFilter from './FormFilter';
 import VacanciesList from './VacanciesList';
 import SearchInput from './SearchInput';
-import { getVacancies, loadFavouritesList } from '../slices/vacanciesSlice';
+import { getVacancies} from '../slices/vacanciesSlice';
 
 const useInitialVacancies = () => {
   const dispatch = useDispatch();
@@ -17,17 +17,8 @@ const useInitialVacancies = () => {
   }, [accessTokenLoadingStatus]);
 };
 
-const useLoadFavourites = () => {
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(loadFavouritesList());
-  }, []);
-};
-
 function VacanciesPage() {
   useInitialVacancies();
-  useLoadFavourites();
 
   const vacanciesList = useSelector((state) => state.vacancies.vacancies);
 

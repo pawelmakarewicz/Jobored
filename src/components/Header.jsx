@@ -2,7 +2,7 @@ import { useState } from 'react';
 import {
   createStyles, Header, Container, Group, rem, Text,
 } from '@mantine/core';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -34,16 +34,19 @@ const useStyles = createStyles((theme) => ({
 const links = [{ path: '/', label: 'Вакансии' }, { path: '/favourites', label: 'Избранное' }];
 
 export default function HeaderSimple() {
-  const [active, setActive] = useState(links[0].link);
+  const [active, setActive] = useState(links[0].path);
+
+  const navigate = useNavigate();
   const { classes, cx } = useStyles();
   const items = links.map((link) => (
     <Link
       to={link.path}
       key={link.label}
-      className={cx(classes.link, { [classes.linkActive]: active === link.link })}
+      className={cx(classes.link, { [classes.linkActive]: active === link.path })}
       onClick={(event) => {
         event.preventDefault();
-        setActive(link.link);
+        setActive(link.path);
+        navigate(link.path);
       }}
     >
       {link.label}

@@ -3,6 +3,9 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import makeGetVacanciesRequest from '../api/makeVacanciesGetRequest';
 
+const FAVOURITE_VACANCIES_KEY = 'favouriteVacancies';
+const FAVOURITE_VACANCIES = 'favourite';
+
 function extractDataForVacanciesList(data) {
   return data.map(({
     id, profession, payment_from, payment_to, type_of_work, address,
@@ -18,16 +21,26 @@ function extractDataForVacanciesList(data) {
 
 export const getVacancies = createAsyncThunk(
   'vacancies/getVacancies',
-  async (favouriteVacanciesIds, thunkApi) => {
+  async (vacanciesType, thunkApi) => {
     const state = thunkApi.getState();
     const { accessToken } = state.accessTokens;
-    const { keyword, paramsFilter, noAgreement } = favouriteVacanciesIds || state.searchParams;
-
-    const params = { keyword, ...paramsFilter, noAgreement };
+    // eslint-disable-next-line max-len
+    const existingFavouriteVacanciesIds = JSON.parse(localStorage.getItem(FAVOURITE_VACANCIES_KEY)) || [];
+    let params;
+    if (vacanciesType === FAVOURITE_VACANCIES) {
+      if (!existingFavouriteVacanciesIds.length) {
+        return { vacanciesList: [], existingFavouriteVacanciesIds };
+      }
+      params = { ids: existingFavouriteVacanciesIds };
+    } else {
+      const { keyword, paramsFilter, noAgreement } = state.searchParams;
+      params = { keyword, ...paramsFilter, noAgreement };
+    }
 
     const response = await makeGetVacanciesRequest(params, accessToken);
+    const vacanciesList = extractDataForVacanciesList(response);
 
-    return extractDataForVacanciesList(response);
+    return { vacanciesList, existingFavouriteVacanciesIds };
   },
 );
 
@@ -42,8 +55,6 @@ function saveVacancy(id, ids) {
 function unsaveVacancy(id, ids) {
   return ids.filter((x) => x !== id);
 }
-
-const FAVOURITE_VACANCIES_KEY = 'favouriteVacancies';
 
 export const toggleSaveVacancy = createAsyncThunk(
   'vacancies/toggleSaveVacancy',
@@ -61,21 +72,10 @@ export const toggleSaveVacancy = createAsyncThunk(
   },
 );
 
-export const loadFavouritesList = createAsyncThunk(
-  'vacancies/loadFavouritesList',
-  async () => {
-    const existingVacancies = JSON.parse(localStorage.getItem(FAVOURITE_VACANCIES_KEY)) || [];
-    return existingVacancies;
-  },
-);
-
 export const loadFavouritesVacancies = createAsyncThunk(
   'vacancies/loadFavouritesVacancies',
   async (_, thunkApi) => {
-    const existingVacancies = JSON.parse(localStorage.getItem(FAVOURITE_VACANCIES_KEY)) || [];
-    thunkApi.dispatch(getVacancies({ ids: existingVacancies.map((x) => x.id) }));
-
-    return existingVacancies;
+    thunkApi.dispatch(getVacancies(FAVOURITE_VACANCIES));
   },
 );
 
@@ -91,7 +91,8 @@ const vacanciesSlice = createSlice({
         state.error = null;
       })
       .addCase(getVacancies.fulfilled, (state, action) => {
-        state.vacancies = action.payload;
+        state.vacancies = action.payload.vacanciesList;
+        state.favouriteVacancies = action.payload.existingFavouriteVacanciesIds;
         state.loadingStatus = 'loaded';
         state.error = null;
       })
@@ -100,12 +101,6 @@ const vacanciesSlice = createSlice({
         state.error = action.error;
       })
       .addCase(toggleSaveVacancy.fulfilled, (state, action) => {
-        state.favouriteVacancies = action.payload;
-      })
-      .addCase(loadFavouritesList.fulfilled, (state, action) => {
-        state.favouriteVacancies = action.payload;
-      })
-      .addCase(loadFavouritesVacancies.fulfilled, (state, action) => {
         state.favouriteVacancies = action.payload;
       });
   },
