@@ -1,7 +1,8 @@
 import { useState } from 'react';
 import {
-  createStyles, Header, Container, Group, rem, Image, Text,
+  createStyles, Header, Container, Group, rem, Text,
 } from '@mantine/core';
+import { Link } from 'react-router-dom';
 
 const useStyles = createStyles((theme) => ({
   header: {
@@ -30,15 +31,15 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const links = [{ link: '123', label: 'Вакансии' }, { link: '45', label: 'Избранное' }];
+const links = [{ path: '/', label: 'Вакансии' }, { path: '/favourites', label: 'Избранное' }];
 
 export default function HeaderSimple() {
   const [active, setActive] = useState(links[0].link);
   const { classes, cx } = useStyles();
   const items = links.map((link) => (
-    <a
+    <Link
+      to={link.path}
       key={link.label}
-      href={link.link}
       className={cx(classes.link, { [classes.linkActive]: active === link.link })}
       onClick={(event) => {
         event.preventDefault();
@@ -46,7 +47,7 @@ export default function HeaderSimple() {
       }}
     >
       {link.label}
-    </a>
+    </Link>
   ));
   return (
     <Header height={84} mb={40}>

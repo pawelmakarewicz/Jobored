@@ -55,7 +55,7 @@ export const getAccessToken = createAsyncThunk(
 const accessTokenSlice = createSlice({
   name: 'accessTokens',
   initialState: {
-    accessToken: null, expiredAt: null, loadingStatus: 'idle', error: null,
+    accessToken: null, expiredAt: null, loadingStatus: null, error: null,
   },
   extraReducers: (builder) => {
     builder

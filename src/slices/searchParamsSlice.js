@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
@@ -7,18 +8,22 @@ const initialState = {
     paymentTo: '',
     catalogue: '',
   },
+  noAgreement: null,
 };
+
+function calculateNoAgreement(paramsFilter) {
+  return (paramsFilter.paymentFrom || paramsFilter.paymentTo) ? 1 : null;
+}
 
 const searchParamsSlice = createSlice({
   name: 'searchParams',
   initialState,
   reducers: {
     setFilters: (state, action) => {
-      // eslint-disable-next-line no-param-reassign
       state.paramsFilter = { ...state.paramsFilter, ...action.payload };
+      state.noAgreement = calculateNoAgreement(action.payload);
     },
     setKeyWord: (state, action) => {
-      // eslint-disable-next-line no-param-reassign
       state.keyword = action.payload;
     },
   },

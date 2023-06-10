@@ -1,48 +1,33 @@
 /* eslint-disable camelcase */
 /* eslint-disable no-param-reassign */
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
-import axiosInstance from '../api/axiosInstance';
-import routes from '../api/routes';
-import initSearchParams from '../api/queryParams/searchParameters';
+import makeGetVacanciesRequest from '../api/makeVacanciesGetRequest';
 
-function calculateNoAgreement(paramsFilter) {
-  return (paramsFilter.paymentFrom || paramsFilter.paymentTo) ? 1 : null;
+function extractDataForVacanciesList(data) {
+  return data.map(({
+    id, profession, payment_from, payment_to, type_of_work, address,
+  }) => ({
+    id,
+    profession,
+    paymentFrom: Number(payment_from),
+    paymentTo: Number(payment_to),
+    typeOfWork: type_of_work,
+    address,
+  }));
 }
 
 export const getVacancies = createAsyncThunk(
   'vacancies/getVacancies',
-  // eslint-disable-next-line default-param-last
-  async (sp, thunkApi) => {
+  async (favouriteVacanciesIds, thunkApi) => {
     const state = thunkApi.getState();
     const { accessToken } = state.accessTokens;
-    const { keyword, paramsFilter } = sp || state.searchParams;
+    const { keyword, paramsFilter, noAgreement } = favouriteVacanciesIds || state.searchParams;
 
-    const searchParams = initSearchParams({
-      keyword, ...paramsFilter, noAgreement: calculateNoAgreement(paramsFilter),
-    });
+    const params = { keyword, ...paramsFilter, noAgreement };
 
-    const authorization = {
-      Authorization: `Bearer ${accessToken}`,
-    };
-    // eslint-disable-next-line max-len
+    const response = await makeGetVacanciesRequest(params, accessToken);
 
-    const response = await axiosInstance.get(
-      routes.vacanciesPath(),
-      { headers: authorization, params: { ...searchParams } },
-    );
-
-    const { objects } = response.data;
-    const payload = objects.map(({
-      id, profession, payment_from, payment_to, type_of_work, address,
-    }) => ({
-      id,
-      profession,
-      paymentFrom: Number(payment_from),
-      paymentTo: Number(payment_to),
-      typeOfWork: type_of_work,
-      address,
-    }));
-    return payload;
+    return extractDataForVacanciesList(response);
   },
 );
 
@@ -72,10 +57,6 @@ export const toggleSaveVacancy = createAsyncThunk(
 
     localStorage.setItem(FAVOURITE_VACANCIES_KEY, JSON.stringify(nextVacancies));
 
-    // if (refetchFavouteVacancies) {
-    //   thunkApi.dispatch(getVacancies({ ids: nextVacancies.map(({ id }) => id) }));
-    // }
-
     return nextVacancies;
   },
 );
@@ -101,7 +82,7 @@ export const loadFavouritesVacancies = createAsyncThunk(
 const vacanciesSlice = createSlice({
   name: 'vacancies',
   initialState: {
-    loadingStatus: 'idle', error: null, favouriteVacancies: [], vacancies: [],
+    loadingStatus: null, error: null, favouriteVacancies: [], vacancies: [],
   },
   extraReducers: (builder) => {
     builder
@@ -111,7 +92,7 @@ const vacanciesSlice = createSlice({
       })
       .addCase(getVacancies.fulfilled, (state, action) => {
         state.vacancies = action.payload;
-        state.loadingStatus = 'idle';
+        state.loadingStatus = 'loaded';
         state.error = null;
       })
       .addCase(getVacancies.rejected, (state, action) => {
