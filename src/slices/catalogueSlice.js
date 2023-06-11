@@ -24,7 +24,7 @@ export const getCatalogues = createAsyncThunk(
   },
 );
 
-const initialState = { cataloguesData: null, loadingStatus: 'idle', error: null };
+const initialState = { cataloguesData: null, loadingStatus: null, error: null };
 
 const catalogueSlice = createSlice({
   name: 'catalogues',
@@ -37,7 +37,7 @@ const catalogueSlice = createSlice({
       })
       .addCase(getCatalogues.fulfilled, (state, action) => {
         state.cataloguesData = action.payload;
-        state.loadingStatus = 'idle';
+        state.loadingStatus = 'loaded';
         state.error = null;
       })
       .addCase(getCatalogues.rejected, (state, action) => {

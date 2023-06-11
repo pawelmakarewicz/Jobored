@@ -1,8 +1,9 @@
 import {
-  Title, Text,
+  Title, Text, Checkbox,
 } from '@mantine/core';
 import { Link } from 'react-router-dom';
-/* eslint-disable camelcase */
+import { useDispatch, useSelector } from 'react-redux';
+import { toggleSaveVacancy } from '../slices/vacanciesSlice';
 
 function getSalary(salaryFrom, salaryTo) {
   if (salaryFrom === 0 && salaryTo === 0) {
@@ -25,14 +26,16 @@ function getSalary(salaryFrom, salaryTo) {
 }
 
 function Vacancy(props) {
+  const dispatch = useDispatch();
+
   const { vacancyData } = props;
 
   const {
-    profession, payment_from, payment_to, type_of_work, address, id
+    profession, paymentFrom, paymentTo, typeOfWork, address, id,
   } = vacancyData;
-  const paymentFrom = Number(payment_from);
-  const paymentTo = Number(payment_to);
-  const typeOfWork = type_of_work;
+
+  const isSaved = useSelector((state) => state.vacancies.favouriteVacancies.includes(id));
+
   const addressData = address ? <Text>{address}</Text> : null;
   return (
     <>
@@ -41,6 +44,11 @@ function Vacancy(props) {
       {addressData}
       <Text>{typeOfWork.title}</Text>
       <Link to={`/${id}`}>{id}</Link>
+      <Checkbox
+        onChange={() => dispatch(toggleSaveVacancy(id))}
+        value={id}
+        checked={isSaved}
+      />
     </>
   );
 }
