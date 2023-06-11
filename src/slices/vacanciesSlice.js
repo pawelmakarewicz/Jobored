@@ -2,21 +2,28 @@
 /* eslint-disable no-param-reassign */
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import makeGetVacanciesRequest from '../api/makeVacanciesGetRequest';
+import makeGetVacancyRequest from '../api/makeVacancyGetRequest';
 
 const FAVOURITE_VACANCIES_KEY = 'favouriteVacancies';
 const FAVOURITE_VACANCIES = 'favourite';
 
-function extractDataForVacanciesList(data) {
-  return data.map(({
-    id, profession, payment_from, payment_to, type_of_work, address,
-  }) => ({
+function convertKeyNames(response) {
+  const {
+    id,
+    profession,
+    payment_from,
+    payment_to,
+    type_of_work,
+    address,
+  } = response;
+  return {
     id,
     profession,
     paymentFrom: Number(payment_from),
     paymentTo: Number(payment_to),
     typeOfWork: type_of_work,
     address,
-  }));
+  };
 }
 
 export const getVacancies = createAsyncThunk(
@@ -38,7 +45,7 @@ export const getVacancies = createAsyncThunk(
     }
 
     const response = await makeGetVacanciesRequest(params, accessToken);
-    const vacanciesList = extractDataForVacanciesList(response);
+    const vacanciesList = response.map(convertKeyNames);
 
     return { vacanciesList, existingFavouriteVacanciesIds };
   },
@@ -79,10 +86,29 @@ export const loadFavouritesVacancies = createAsyncThunk(
   },
 );
 
+export const loadVacancy = createAsyncThunk(
+  'vacancies/loadVacancy',
+  async (vacancyId, thunkApi) => {
+    const state = thunkApi.getState();
+    const { accessToken } = state.accessTokens;
+    // eslint-disable-next-line max-len
+    const existingFavouriteVacanciesIds = JSON.parse(localStorage.getItem(FAVOURITE_VACANCIES_KEY)) || [];
+
+    const response = await makeGetVacancyRequest(vacancyId, accessToken);
+    const vacancyData = convertKeyNames(response);
+    return { vacancyData, existingFavouriteVacanciesIds, description: response.vacancyRichText };
+  },
+);
+
 const vacanciesSlice = createSlice({
   name: 'vacancies',
   initialState: {
-    loadingStatus: null, error: null, favouriteVacancies: [], vacancies: [],
+    loadingStatus: null,
+    error: null,
+    favouriteVacancies: [],
+    vacancies: [],
+    currentVacancy: null,
+    currentVacancyDescription: null,
   },
   extraReducers: (builder) => {
     builder
@@ -91,8 +117,8 @@ const vacanciesSlice = createSlice({
         state.error = null;
       })
       .addCase(getVacancies.fulfilled, (state, action) => {
-        state.vacancies = action.payload.vacanciesList;
         state.favouriteVacancies = action.payload.existingFavouriteVacanciesIds;
+        state.vacancies = action.payload.vacanciesList;
         state.loadingStatus = 'loaded';
         state.error = null;
       })
@@ -102,6 +128,22 @@ const vacanciesSlice = createSlice({
       })
       .addCase(toggleSaveVacancy.fulfilled, (state, action) => {
         state.favouriteVacancies = action.payload;
+      })
+      .addCase(loadVacancy.pending, (state) => {
+        state.loadingStatus = 'loading';
+        state.error = null;
+      })
+      .addCase(loadVacancy.fulfilled, (state, action) => {
+        const { vacancyData, existingFavouriteVacanciesIds, description } = action.payload;
+        state.favouriteVacancies = existingFavouriteVacanciesIds;
+        state.currentVacancy = vacancyData;
+        state.currentVacancyDescription = description;
+        state.loadingStatus = 'loaded';
+        state.error = null;
+      })
+      .addCase(loadVacancy.rejected, (state, action) => {
+        state.loadingStatus = 'failed';
+        state.error = action.error;
       });
   },
 });

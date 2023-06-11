@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import FormFilter from './FormFilter';
 import VacanciesList from './VacanciesList';
 import SearchInput from './SearchInput';
-import { getVacancies} from '../slices/vacanciesSlice';
+import { getVacancies } from '../slices/vacanciesSlice';
 
 const useInitialVacancies = () => {
   const dispatch = useDispatch();

@@ -5,7 +5,7 @@ import Vacancy from './Vacancy';
 import { loadVacancy } from '../slices/vacanciesSlice';
 
 export async function vacancyPageLoader({ params }) {
-  return params.vacancyId;
+  return Number(params.vacancyId);
 }
 
 const useVacancy = (id) => {
@@ -14,7 +14,7 @@ const useVacancy = (id) => {
 
   useEffect(() => {
     if (accessTokenLoadingStatus === 'succeed') {
-      // dispatch(loadVacancy(id));
+      dispatch(loadVacancy(id));
     }
   }, [accessTokenLoadingStatus]);
 };
@@ -22,10 +22,12 @@ const useVacancy = (id) => {
 export default function VacancyPage() {
   const vacancyId = useLoaderData();
   useVacancy(vacancyId);
-  const vacancyData = useSelector((state) => state.vacancies);
+  const vacancyData = useSelector((state) => state.vacancies.currentVacancy);
+  const description = useSelector((state) => state.vacancies.currentVacancyDescription);
   return (
     <div>
-      {JSON.stringify(vacancyData)}
+      {vacancyData ? <Vacancy vacancyData={vacancyData} /> : null}
+      {description ? <div dangerouslySetInnerHTML={{ __html: description }} /> : null}
     </div>
   );
 }
