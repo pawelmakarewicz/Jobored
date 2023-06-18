@@ -1,8 +1,8 @@
 import { useEffect } from 'react';
-import { Group, Center } from '@mantine/core';
+import { Group } from '@mantine/core';
 import { useDispatch, useSelector } from 'react-redux';
 import VacanciesList from './VacanciesList';
-import { loadFavouritesVacancies } from '../slices/vacanciesSlice';
+import { loadFavouritesVacancies, clearVacancies } from '../slices/vacanciesSlice';
 
 const useFavouriteVacancies = () => {
   const dispatch = useDispatch();
@@ -11,6 +11,7 @@ const useFavouriteVacancies = () => {
     if (accessTokenLoadingStatus === 'succeed') {
       dispatch(loadFavouritesVacancies());
     }
+    return () => dispatch(clearVacancies());
   }, [accessTokenLoadingStatus]);
 };
 
@@ -19,13 +20,9 @@ function FavouritesPage() {
   const vacancies = useSelector((state) => state.vacancies.vacancies);
 
   return (
-    <Center>
-      <Group maw={1115} align="top">
-        <Group maw={770} align="top">
-          <VacanciesList vacancies={vacancies} />
-        </Group>
-      </Group>
-    </Center>
+    <Group maw={770} align="top" mx="auto">
+      <VacanciesList vacancies={vacancies} />
+    </Group>
   );
 }
 

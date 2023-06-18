@@ -13,9 +13,9 @@ export default function SearchInput() {
       dispatch((setKeyWord('')));
     })}
     >
-      <Group position="center" mt="md">
+      <Group position="apart" mt="md">
         <TextInput placeholder="Введите название вакансии" value={filterData} onChange={(e) => { dispatch(setKeyWord(e.currentTarget.value)); }} variant="unstyled" />
-        <Button type="submit">Применить</Button>
+        <Button type="submit">Поиск</Button>
       </Group>
     </form>
   );

@@ -5,7 +5,8 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 
 const useStyles = createStyles((theme) => ({
-  header: {
+
+  headerContainer: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
@@ -40,7 +41,7 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const links = [{ path: '/', label: 'Вакансии' }, { path: '/favourites', label: 'Избранное' }];
+const links = [{ path: '/', label: 'Поиск Вакансий' }, { path: '/favourites', label: 'Избранное' }];
 
 export default function HeaderSimple() {
   const [active, setActive] = useState(links[0].path);
@@ -63,15 +64,17 @@ export default function HeaderSimple() {
   ));
 
   return (
-    <Header height={84} mb={40}>
-      <Container className={classes.header} maw={700}>
-        <div className={classes.logo}>
-          <Image src="/logo.svg" alt="Logo" className={classes.logoImage} />
-          <Text>Jobored</Text>
-        </div>
-        <Group spacing={5} className={classes.links}>
-          {items}
-        </Group>
+    <Header mb={40} className={classes.header}>
+      <Container maw={1115} mx="auto" h={84}>
+        <Container className={classes.headerContainer} maw={700} ml={0} pl={0}>
+          <Container className={classes.logo} ml={0} pl={0}>
+            <Image src="/logo.svg" alt="Logo" className={classes.logoImage} />
+            <Text>Jobored</Text>
+          </Container>
+          <Group spacing={5} className={classes.links}>
+            {items}
+          </Group>
+        </Container>
       </Container>
     </Header>
   );

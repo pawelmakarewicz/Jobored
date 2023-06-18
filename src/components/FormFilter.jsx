@@ -31,7 +31,8 @@ export default function FormFilter() {
   const filterData = useSelector((state) => state.searchParams.paramsFilter);
   const cataloguesData = useSelector((state) => state.catalogues.cataloguesData) || [];
 
-  const catalogueOptions = cataloguesData.map(({ titleTrimmed, key }) => ({ value: key, label: titleTrimmed }));
+  const catalogueOptions = cataloguesData.map(({ titleTrimmed, key }) => (
+    { value: key, label: titleTrimmed }));
   const { paymentFrom, paymentTo } = filterData;
 
   return (

@@ -7,5 +7,14 @@ export default function setTheme() {
         h3: { fontSize: '1rem' },
       },
     },
+    components: {
+      List: {
+        defaultProps: {
+          listStyleType: 'none',
+          margin: 0,
+          padding: 0,
+        },
+      },
+    },
   };
 }

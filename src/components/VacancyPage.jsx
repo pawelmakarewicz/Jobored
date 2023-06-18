@@ -2,7 +2,7 @@ import { useLoaderData } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { useEffect } from 'react';
 import Vacancy from './Vacancy';
-import { loadVacancy } from '../slices/vacanciesSlice';
+import { loadVacancy, clearCurrentVacancy } from '../slices/vacanciesSlice';
 
 export async function vacancyPageLoader({ params }) {
   return Number(params.vacancyId);
@@ -15,7 +15,7 @@ const useVacancy = (id) => {
   useEffect(() => {
     if (accessTokenLoadingStatus === 'succeed') {
       dispatch(loadVacancy(id));
-    }
+    } return () => dispatch(clearCurrentVacancy());
   }, [accessTokenLoadingStatus]);
 };
 

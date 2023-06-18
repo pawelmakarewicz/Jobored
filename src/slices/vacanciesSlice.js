@@ -100,15 +100,26 @@ export const loadVacancy = createAsyncThunk(
   },
 );
 
+const initialState = {
+  loadingStatus: null,
+  error: null,
+  favouriteVacancies: [],
+  vacancies: [],
+  currentVacancy: null,
+  currentVacancyDescription: null,
+};
+
 const vacanciesSlice = createSlice({
   name: 'vacancies',
-  initialState: {
-    loadingStatus: null,
-    error: null,
-    favouriteVacancies: [],
-    vacancies: [],
-    currentVacancy: null,
-    currentVacancyDescription: null,
+  initialState,
+  reducers: {
+    clearVacancies: (state) => {
+      state.vacancies = [];
+    },
+    clearCurrentVacancy: (state) => {
+      state.currentVacancy = null;
+      state.currentVacancyDescription = null;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -148,4 +159,5 @@ const vacanciesSlice = createSlice({
   },
 });
 
+export const { clearVacancies, clearCurrentVacancy } = vacanciesSlice.actions;
 export default vacanciesSlice.reducer;
