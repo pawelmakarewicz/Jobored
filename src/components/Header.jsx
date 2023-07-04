@@ -5,12 +5,23 @@ import {
 import { Link, useNavigate } from 'react-router-dom';
 
 const useStyles = createStyles((theme) => ({
-
+  header: {
+    marginBottom: '40px',
+  },
+  additionalContainer: {
+    maxWidth: '1115px',
+    marginRight: 'auto',
+    marginLeft: 'auto',
+    height: '84px',
+  },
   headerContainer: {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
     height: '100%',
+    marginLeft: 0,
+    paddingLeft: 0,
+    maxWidth: 700,
   },
   link: {
     display: 'block',
@@ -30,9 +41,10 @@ const useStyles = createStyles((theme) => ({
     fontFamily: 'Poppins, sans-serif',
     fontSize: '1.5rem',
     fontWeight: 600,
-    marginLeft: theme.spacing.xs,
     display: 'flex',
     alignItems: 'center',
+    marginLeft: 0,
+    paddingLeft: 0,
   },
   logoImage: {
     marginRight: theme.spacing.xs,
@@ -64,10 +76,10 @@ export default function HeaderSimple() {
   ));
 
   return (
-    <Header mb={40} className={classes.header}>
-      <Container maw={1115} mx="auto" h={84}>
-        <Container className={classes.headerContainer} maw={700} ml={0} pl={0}>
-          <Container className={classes.logo} ml={0} pl={0}>
+    <Header className={classes.header}>
+      <Container className={classes.additionalContainer}>
+        <Container className={classes.headerContainer}>
+          <Container className={classes.logo}>
             <Image src="/logo.svg" alt="Logo" className={classes.logoImage} />
             <Text>Jobored</Text>
           </Container>

@@ -1,12 +1,33 @@
 import { useEffect } from 'react';
 import {
-  Text, NumberInput, List, Select, Button, Group, Title, Box,
+  createStyles, Text, NumberInput, List, Select, Button, Group, Title, Box,
 } from '@mantine/core';
 import { IconChevronDown, IconX } from '@tabler/icons-react';
 import { useDispatch, useSelector } from 'react-redux';
 import { setFilters } from '../slices/searchParamsSlice';
 import { getVacancies } from '../slices/vacanciesSlice';
 import { getCatalogues } from '../slices/catalogueSlice';
+
+const useStyles = createStyles((theme) => ({
+  formBox: {
+    padding: '20px',
+    background: 'white',
+    borderRadius: theme.radius.md,
+    maxWidth: '315px',
+  },
+  resetBottom: {
+    color: 'gray',
+    '&:hover': {
+      backgroundColor: theme.colors.gray[0],
+    },
+  },
+  input: {
+    display: 'block',
+  },
+  numberInputRight: {
+    border: 'none',
+  },
+}));
 
 const emptyFilter = {
   paymentFrom: '',
@@ -28,6 +49,7 @@ const useInitialCatalogue = () => {
 export default function FormFilter() {
   useInitialCatalogue();
   const dispatch = useDispatch();
+  const { classes } = useStyles();
   const filterData = useSelector((state) => state.searchParams.paramsFilter);
   const cataloguesData = useSelector((state) => state.catalogues.cataloguesData) || [];
 
@@ -36,10 +58,10 @@ export default function FormFilter() {
   const { paymentFrom, paymentTo } = filterData;
 
   return (
-    <Box p={20} maw={315}>
-      <Group position="apart" mt="md">
+    <Box className={classes.formBox}>
+      <Group position="apart" mb="md">
         <Title order={2}>Фильтры</Title>
-        <Button rightIcon={<IconX size="1rem" />} variant="white" color="gray" type="reset" onClick={() => { dispatch(setFilters({ ...emptyFilter })); }}>
+        <Button className={classes.resetBottom} rightIcon={<IconX size="1rem" />} variant="white" onClick={() => { dispatch(setFilters({ ...emptyFilter })); }}>
           <Text fz="xs">Сбросить все</Text>
         </Button>
       </Group>
@@ -48,11 +70,9 @@ export default function FormFilter() {
         dispatch(getVacancies());
       })}
       >
-        <List>
+        <List classNames={{ itemWrapper: classes.input }}>
           <List.Item>
-            <Group position="left" mt="md">
-              <Title order={3}>Отрасль</Title>
-            </Group>
+            <Title order={3}>Отрасль</Title>
             <Select
               placeholder="Выберете отрасль"
               rightSection={<IconChevronDown size="1rem" />}
@@ -71,18 +91,20 @@ export default function FormFilter() {
               <Title order={3}>Оклад</Title>
             </Group>
             <NumberInput
-              pb="0.5rem"
+              mb="0.5rem"
               placeholder="От"
               min={0}
               max={paymentTo}
               value={paymentFrom}
               onChange={(e) => { dispatch(setFilters({ paymentFrom: Number(e) })); }}
+              classNames={{ control: classes.numberInputRight }}
             />
             <NumberInput
               placeholder="До"
               min={paymentFrom}
               value={paymentTo}
               onChange={(e) => { dispatch(setFilters({ paymentTo: Number(e) })); }}
+              classNames={{ control: classes.numberInputRight }}
             />
           </List.Item>
         </List>

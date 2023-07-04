@@ -24,7 +24,7 @@ function VacanciesPage() {
   const vacanciesList = useSelector((state) => state.vacancies.vacancies);
   const vacanciesLoadingStatus = useSelector((state) => state.vacancies.loadingStatus);
   return (
-    <Group maw={1115} align="top" mx="auto" position="left">
+    <Group maw={1115} align="start" mx="auto" position="left" noWrap>
       <FormFilter />
       <Container maw={770} align="top" m={0}>
         <SearchInput />

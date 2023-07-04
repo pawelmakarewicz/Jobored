@@ -1,5 +1,5 @@
 import {
-  Title, Text, Checkbox,
+  Title, Text, Checkbox, Button, Container,
 } from '@mantine/core';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -38,18 +38,19 @@ function Vacancy(props) {
 
   const addressData = address ? <Text>{address}</Text> : null;
   return (
-    <>
-      <Title order={2}>{profession}</Title>
+    <Container>
+      <Container component={Link} to={`/${id}`}>
+        <Title order={2}>{profession}</Title>
+      </Container>
       {getSalary(paymentFrom, paymentTo)}
       {addressData}
       <Text>{typeOfWork.title}</Text>
-      <Link to={`/${id}`}>{id}</Link>
       <Checkbox
         onChange={() => dispatch(toggleSaveVacancy(id))}
         value={id}
         checked={isSaved}
       />
-    </>
+    </Container>
   );
 }
 export default Vacancy;
