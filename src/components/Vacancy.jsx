@@ -1,8 +1,9 @@
 import {
-  Title, Text, Checkbox, createStyles, Container,
+  Title, Text, Checkbox, createStyles, Container, Group, ThemeIcon,
 } from '@mantine/core';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
+import { TiLocationOutline } from 'react-icons/ti';
 import { toggleSaveVacancy } from '../slices/vacanciesSlice';
 
 function getSalary(salaryFrom, salaryTo) {
@@ -22,7 +23,7 @@ function getSalary(salaryFrom, salaryTo) {
   if (salaryTo === salaryFrom) {
     value = `${salaryFrom}`;
   }
-  return <Text>{`з/п ${value} rub`}</Text>;
+  return <Text weight="bold">{`з/п ${value} rub`}</Text>;
 }
 
 const useStyles = createStyles((theme) => ({
@@ -33,9 +34,32 @@ const useStyles = createStyles((theme) => ({
     padding: '1.5rem',
     borderRadius: theme.radius.md,
     border: '0.0625rem solid #ced4da',
+    position: 'relative',
   },
   title: {
+    display: 'block',
+    marginBottom: '0.5rem',
     color: theme.colors.blueParalcet[0],
+    '&:hover': {
+      textDecoration: 'underline',
+    },
+  },
+  checkBox: {
+    position: 'absolute',
+    top: '1.5rem',
+    right: '1.5rem',
+  },
+  informationWrapper: {
+    paddingLeft: 0,
+    paddingRight: '2.5rem',
+  },
+  typeOfWork: {
+    '&:before': {
+      content: '"•"',
+      color: 'green',
+      display: 'inline-block',
+      marginRight: '5px',
+    },
   },
 }));
 
@@ -51,17 +75,28 @@ function Vacancy(props) {
 
   const isSaved = useSelector((state) => state.vacancies.favouriteVacancies.includes(id));
 
-  const addressData = address ? <Text>{address}</Text> : null;
+  const addressData = address ? (
+    <Group position="left" noWrap spacing={0}>
+      <TiLocationOutline color="gray" />
+      <Text ml="0.7rem">{address}</Text>
+    </Group>
+  ) : null;
   return (
     <Container className={classes.wrapper}>
-      <Title className={classes.title} component={Link} to={`/${id}`} order={2}>{profession}</Title>
-      {getSalary(paymentFrom, paymentTo)}
-      {addressData}
-      <Text>{typeOfWork.title}</Text>
+      <Container className={classes.informationWrapper}>
+        <Title className={classes.title} component={Link} to={`/${id}`} order={2}>{profession}</Title>
+        <Group mb="0.5rem">
+          {getSalary(paymentFrom, paymentTo)}
+          <Text className={classes.typeOfWork}>{typeOfWork.title}</Text>
+        </Group>
+        {addressData}
+      </Container>
       <Checkbox
         onChange={() => dispatch(toggleSaveVacancy(id))}
         value={id}
         checked={isSaved}
+        className={classes.checkBox}
+        size="lg"
       />
     </Container>
   );
