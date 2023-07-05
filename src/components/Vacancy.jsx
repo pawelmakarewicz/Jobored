@@ -34,6 +34,9 @@ const useStyles = createStyles((theme) => ({
     borderRadius: theme.radius.md,
     border: '0.0625rem solid #ced4da',
   },
+  title: {
+    color: theme.colors.blueParalcet[0],
+  },
 }));
 
 function Vacancy(props) {
@@ -51,9 +54,7 @@ function Vacancy(props) {
   const addressData = address ? <Text>{address}</Text> : null;
   return (
     <Container className={classes.wrapper}>
-      <Container component={Link} to={`/${id}`}>
-        <Title order={2}>{profession}</Title>
-      </Container>
+      <Title className={classes.title} component={Link} to={`/${id}`} order={2}>{profession}</Title>
       {getSalary(paymentFrom, paymentTo)}
       {addressData}
       <Text>{typeOfWork.title}</Text>

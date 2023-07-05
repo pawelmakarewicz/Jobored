@@ -35,7 +35,7 @@ const useStyles = createStyles((theme) => ({
     },
   },
   linkActive: {
-    color: theme.colors.blue[7],
+    color: theme.colors.blueParalcet[0],
   },
   logo: {
     fontFamily: 'Poppins, sans-serif',
