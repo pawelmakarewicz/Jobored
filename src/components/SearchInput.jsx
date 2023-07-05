@@ -1,5 +1,8 @@
-import { TextInput, Group, Button } from '@mantine/core';
+import {
+  TextInput, Button, Container,
+} from '@mantine/core';
 import { useDispatch, useSelector } from 'react-redux';
+import { IconSearch } from '@tabler/icons-react';
 import { getVacancies } from '../slices/vacanciesSlice';
 import { setKeyWord } from '../slices/searchParamsSlice';
 
@@ -7,16 +10,25 @@ export default function SearchInput() {
   const dispatch = useDispatch();
   const filterData = useSelector((state) => state.searchParams.keyword);
   return (
-    <form onSubmit={((e) => {
-      e.preventDefault();
-      dispatch(getVacancies());
-      dispatch((setKeyWord('')));
-    })}
-    >
-      <Group position="apart" mt="md">
-        <TextInput placeholder="Введите название вакансии" value={filterData} onChange={(e) => { dispatch(setKeyWord(e.currentTarget.value)); }} variant="unstyled" />
-        <Button type="submit">Поиск</Button>
-      </Group>
-    </form>
+    <Container p={0} mb="1rem">
+      <form onSubmit={((e) => {
+        e.preventDefault();
+        dispatch(getVacancies());
+        dispatch((setKeyWord('')));
+      })}
+      >
+        <TextInput
+          styles={{ input: { height: '3rem' } }}
+          icon={<IconSearch size="1.1rem" stroke={1.5} />}
+          placeholder="Введите название вакансии"
+          value={filterData}
+          onChange={(e) => { dispatch(setKeyWord(e.currentTarget.value)); }}
+          rightSection={(
+            <Button type="submit">Поиск</Button>
+          )}
+          rightSectionWidth={100}
+        />
+      </form>
+    </Container>
   );
 }

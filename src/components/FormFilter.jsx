@@ -14,6 +14,7 @@ const useStyles = createStyles((theme) => ({
     background: 'white',
     borderRadius: theme.radius.md,
     maxWidth: '315px',
+    border: '0.0625rem solid #ced4da',
   },
   resetBottom: {
     color: 'gray',

@@ -1,5 +1,5 @@
 import {
-  Title, Text, Checkbox, Button, Container,
+  Title, Text, Checkbox, createStyles, Container,
 } from '@mantine/core';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -25,9 +25,21 @@ function getSalary(salaryFrom, salaryTo) {
   return <Text>{`з/п ${value} rub`}</Text>;
 }
 
+const useStyles = createStyles((theme) => ({
+  wrapper: {
+    background: 'white',
+    width: '100%',
+    marginBottom: '1rem',
+    padding: '1.5rem',
+    borderRadius: theme.radius.md,
+    border: '0.0625rem solid #ced4da',
+  },
+}));
+
 function Vacancy(props) {
   const dispatch = useDispatch();
 
+  const { classes } = useStyles();
   const { vacancyData } = props;
 
   const {
@@ -38,7 +50,7 @@ function Vacancy(props) {
 
   const addressData = address ? <Text>{address}</Text> : null;
   return (
-    <Container>
+    <Container className={classes.wrapper}>
       <Container component={Link} to={`/${id}`}>
         <Title order={2}>{profession}</Title>
       </Container>

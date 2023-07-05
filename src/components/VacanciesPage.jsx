@@ -1,6 +1,8 @@
 import { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { Group, Loader, Container } from '@mantine/core';
+import {
+  createStyles, Group, Loader, Container, Center,
+} from '@mantine/core';
 import FormFilter from './FormFilter';
 import VacanciesList from './VacanciesList';
 import SearchInput from './SearchInput';
@@ -18,17 +20,35 @@ const useInitialVacancies = () => {
   }, [accessTokenLoadingStatus]);
 };
 
+const useStyles = createStyles(() => ({
+  flexContainer: {
+    display: 'flex',
+    justifyContent: 'flex-start',
+    alignItems: 'start',
+    flexWrap: 'nowrap',
+    marginLeft: 'auto',
+    marginRight: 'auto',
+    maxWidth: '1115px',
+  },
+  flexItem: {
+    maxWidth: '770px',
+    margin: '0px',
+    flexGrow: 1,
+  },
+}));
+
 function VacanciesPage() {
   useInitialVacancies();
 
   const vacanciesList = useSelector((state) => state.vacancies.vacancies);
   const vacanciesLoadingStatus = useSelector((state) => state.vacancies.loadingStatus);
+  const { classes } = useStyles();
   return (
-    <Group maw={1115} align="start" mx="auto" position="left" noWrap>
+    <Group className={classes.flexContainer}>
       <FormFilter />
-      <Container maw={770} align="top" m={0}>
+      <Container className={classes.flexItem}>
         <SearchInput />
-        {vacanciesLoadingStatus === 'loaded' ? <VacanciesList vacancies={vacanciesList} /> : <Loader size="xl" /> }
+        {vacanciesLoadingStatus === 'loaded' ? <VacanciesList vacancies={vacanciesList} /> : <Center><Loader variant="bars" size="xl" /></Center> }
       </Container>
     </Group>
   );
