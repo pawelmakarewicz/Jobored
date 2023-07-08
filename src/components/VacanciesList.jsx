@@ -6,6 +6,7 @@ import Vacancy from './Vacancy';
 
 const useStyles = createStyles((theme) => ({
   input: {
+    margin: 'auto',
     display: 'block',
   },
 }));

@@ -1,8 +1,11 @@
 import { useEffect } from 'react';
-import { Group } from '@mantine/core';
+import {
+  Center, Loader, Image, Text, Flex, Button,
+} from '@mantine/core';
 import { useDispatch, useSelector } from 'react-redux';
+import { Link } from 'react-router-dom';
 import VacanciesList from './VacanciesList';
-import { loadFavouritesVacancies, clearVacancies } from '../slices/vacanciesSlice';
+import { loadFavouritesVacancies } from '../slices/vacanciesSlice';
 
 const useFavouriteVacancies = () => {
   const dispatch = useDispatch();
@@ -11,18 +14,40 @@ const useFavouriteVacancies = () => {
     if (accessTokenLoadingStatus === 'succeed') {
       dispatch(loadFavouritesVacancies());
     }
-    return () => dispatch(clearVacancies());
   }, [accessTokenLoadingStatus]);
 };
+
+function isEmpty(list) {
+  return !list.length;
+}
+
+function showVacanciesList(vacancies) {
+  if (isEmpty(vacancies)) {
+    return (
+      <Flex mx="auto" maw={770} direction="column" align="center">
+        <Image maw={300} mb="1rem" src="/emptyState.svg" alt="emptyState" />
+        <Text mb="1rem" fz="1.5rem">Упс, здесь еще ничего нет!</Text>
+        <Button component={Link} to="/">
+          <Text fz="xl">Поиск Вакансий</Text>
+        </Button>
+      </Flex>
+    );
+  }
+  return <VacanciesList vacancies={vacancies} />;
+}
 
 function FavouritesPage() {
   useFavouriteVacancies();
   const vacancies = useSelector((state) => state.vacancies.vacancies);
-
+  const vacanciesLoadingStatus = useSelector((state) => state.vacancies.loadingStatus);
   return (
-    <Group maw={770} align="top" mx="auto">
-      <VacanciesList vacancies={vacancies} />
-    </Group>
+    vacanciesLoadingStatus === 'loaded' ? (
+      showVacanciesList(vacancies)
+    ) : (
+      <Center>
+        <Loader variant="bars" size="xl" />
+      </Center>
+    )
   );
 }
 

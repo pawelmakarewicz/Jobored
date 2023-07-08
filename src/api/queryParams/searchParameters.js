@@ -7,6 +7,7 @@ const renameDict = {
   noAgreement: 'no_agreement',
   ids: 'ids',
   vacancyId: 'id_vacancy',
+  count: 'count',
 };
 
 function setSearchParamsApi(params) {

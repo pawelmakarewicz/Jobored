@@ -6,6 +6,7 @@ import makeGetVacancyRequest from '../api/makeVacancyGetRequest';
 
 const FAVOURITE_VACANCIES_KEY = 'favouriteVacancies';
 const FAVOURITE_VACANCIES = 'favourite';
+const VACANCIES_NUMBER = 100;
 
 function convertKeyNames(response) {
   const {
@@ -26,28 +27,33 @@ function convertKeyNames(response) {
   };
 }
 
+function isEmptyParams(params) {
+  return !params.length;
+}
+
 export const getVacancies = createAsyncThunk(
   'vacancies/getVacancies',
   async (vacanciesType, thunkApi) => {
     const state = thunkApi.getState();
     const { accessToken } = state.accessTokens;
-    // eslint-disable-next-line max-len
-    const existingFavouriteVacanciesIds = JSON.parse(localStorage.getItem(FAVOURITE_VACANCIES_KEY)) || [];
+    const favouriteVacanciesIds = JSON.parse(localStorage.getItem(FAVOURITE_VACANCIES_KEY)) || [];
     let params;
     if (vacanciesType === FAVOURITE_VACANCIES) {
-      if (!existingFavouriteVacanciesIds.length) {
-        return { vacanciesList: [], existingFavouriteVacanciesIds };
+      if (isEmptyParams(favouriteVacanciesIds)) {
+        return { vacanciesList: [], favouriteVacanciesIds };
       }
-      params = { ids: existingFavouriteVacanciesIds };
+      params = { ids: favouriteVacanciesIds };
     } else {
       const { keyword, paramsFilter, noAgreement } = state.searchParams;
-      params = { keyword, ...paramsFilter, noAgreement };
+      params = {
+        keyword, ...paramsFilter, noAgreement, count: VACANCIES_NUMBER,
+      };
     }
 
     const response = await makeGetVacanciesRequest(params, accessToken);
     const vacanciesList = response.map(convertKeyNames);
 
-    return { vacanciesList, existingFavouriteVacanciesIds };
+    return { vacanciesList, favouriteVacanciesIds };
   },
 );
 
@@ -92,11 +98,11 @@ export const loadVacancy = createAsyncThunk(
     const state = thunkApi.getState();
     const { accessToken } = state.accessTokens;
     // eslint-disable-next-line max-len
-    const existingFavouriteVacanciesIds = JSON.parse(localStorage.getItem(FAVOURITE_VACANCIES_KEY)) || [];
+    const favouriteVacanciesIds = JSON.parse(localStorage.getItem(FAVOURITE_VACANCIES_KEY)) || [];
 
     const response = await makeGetVacancyRequest(vacancyId, accessToken);
     const vacancyData = convertKeyNames(response);
-    return { vacancyData, existingFavouriteVacanciesIds, description: response.vacancyRichText };
+    return { vacancyData, favouriteVacanciesIds, description: response.vacancyRichText };
   },
 );
 
@@ -124,11 +130,12 @@ const vacanciesSlice = createSlice({
   extraReducers: (builder) => {
     builder
       .addCase(getVacancies.pending, (state) => {
+        state.vacancies = [];
         state.loadingStatus = 'loading';
         state.error = null;
       })
       .addCase(getVacancies.fulfilled, (state, action) => {
-        state.favouriteVacancies = action.payload.existingFavouriteVacanciesIds;
+        state.favouriteVacancies = action.payload.favouriteVacanciesIds;
         state.vacancies = action.payload.vacanciesList;
         state.loadingStatus = 'loaded';
         state.error = null;
@@ -145,8 +152,8 @@ const vacanciesSlice = createSlice({
         state.error = null;
       })
       .addCase(loadVacancy.fulfilled, (state, action) => {
-        const { vacancyData, existingFavouriteVacanciesIds, description } = action.payload;
-        state.favouriteVacancies = existingFavouriteVacanciesIds;
+        const { vacancyData, favouriteVacanciesIds, description } = action.payload;
+        state.favouriteVacancies = favouriteVacanciesIds;
         state.currentVacancy = vacancyData;
         state.currentVacancyDescription = description;
         state.loadingStatus = 'loaded';

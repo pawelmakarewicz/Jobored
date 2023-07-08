@@ -1,5 +1,5 @@
 import {
-  Title, Text, Checkbox, createStyles, Container, Group, ThemeIcon,
+  Title, Text, Checkbox, createStyles, Container, Group,
 } from '@mantine/core';
 import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -35,6 +35,7 @@ const useStyles = createStyles((theme) => ({
     borderRadius: theme.radius.md,
     border: '0.0625rem solid #ced4da',
     position: 'relative',
+    maxWidth: '770px',
   },
   title: {
     display: 'block',
@@ -56,7 +57,7 @@ const useStyles = createStyles((theme) => ({
   typeOfWork: {
     '&:before': {
       content: '"•"',
-      color: 'green',
+      color: 'gray',
       display: 'inline-block',
       marginRight: '5px',
     },
