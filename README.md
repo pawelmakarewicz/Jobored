@@ -1,1 +1,2 @@
-# Paralect 2023
+## Deploy: 
+https://jobored-ten.vercel.app/
