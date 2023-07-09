@@ -1,10 +1,11 @@
+/* eslint-disable react/prop-types */
 import {
   List, createStyles,
 } from '@mantine/core';
 
 import Vacancy from './Vacancy';
 
-const useStyles = createStyles((theme) => ({
+const useStyles = createStyles(() => ({
   input: {
     margin: 'auto',
     display: 'block',

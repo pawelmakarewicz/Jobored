@@ -42,7 +42,7 @@ const useInitialVacancies = () => {
 
 // }
 
-const ITEMS_PER_PAGE = 5;
+const ITEMS_PER_PAGE = 4;
 
 function VacanciesPage() {
   useInitialVacancies();

@@ -6,7 +6,7 @@ import makeGetVacancyRequest from '../api/makeVacancyGetRequest';
 
 const FAVOURITE_VACANCIES_KEY = 'favouriteVacancies';
 const FAVOURITE_VACANCIES = 'favourite';
-const VACANCIES_NUMBER = 100;
+const VACANCIES_NUMBER = 80;
 
 function convertKeyNames(response) {
   const {

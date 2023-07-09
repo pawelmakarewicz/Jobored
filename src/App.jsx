@@ -2,7 +2,7 @@ import { MantineProvider } from '@mantine/core';
 import { useDispatch } from 'react-redux';
 import { useEffect } from 'react';
 import {
-  createBrowserRouter,
+  createHashRouter,
   RouterProvider,
 } from 'react-router-dom';
 import Root from './components/Root';
@@ -15,7 +15,7 @@ import VacancyPage, { vacancyPageLoader } from './components/VacancyPage';
 import setTheme from './myTheme';
 import { getAccessToken } from './slices/accessTokenSlice';
 
-const router = createBrowserRouter([
+const router = createHashRouter([
   {
     path: '/',
     element: <Root />,

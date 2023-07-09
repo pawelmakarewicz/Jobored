@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import {
   Title, Text, Checkbox, createStyles, Container, Group,
 } from '@mantine/core';
