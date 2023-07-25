@@ -20,11 +20,11 @@ export default function SearchInput() {
         <TextInput
           styles={{ input: { height: '3rem' } }}
           icon={<IconSearch size="1.1rem" stroke={1.5} />}
-          placeholder="Введите название вакансии"
+          placeholder="Enter job title"
           value={filterData}
           onChange={(e) => { dispatch(setKeyWord(e.currentTarget.value)); }}
           rightSection={(
-            <Button type="submit">Поиск</Button>
+            <Button type="submit">Search</Button>
           )}
           rightSectionWidth={100}
         />

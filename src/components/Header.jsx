@@ -53,7 +53,7 @@ const useStyles = createStyles((theme) => ({
   },
 }));
 
-const links = [{ path: '/', label: 'Поиск Вакансий' }, { path: '/favourites', label: 'Избранное' }];
+const links = [{ path: '/', label: 'Search for jobs' }, { path: '/favourites', label: 'Favorite vacancies' }];
 
 export default function HeaderSimple() {
   const [active, setActive] = useState(links[0].path);

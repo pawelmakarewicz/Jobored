@@ -61,9 +61,9 @@ export default function FormFilter() {
   return (
     <Box className={classes.formBox}>
       <Group position="apart" mb="md">
-        <Title order={2}>Фильтры</Title>
+        <Title order={2}>Filters</Title>
         <Button className={classes.resetBottom} rightIcon={<IconX size="1rem" />} variant="white" onClick={() => { dispatch(setFilters({ ...emptyFilter })); }}>
-          <Text fz="xs">Сбросить все</Text>
+          <Text fz="xs">Reset form</Text>
         </Button>
       </Group>
       <form onSubmit={((e) => {
@@ -73,9 +73,9 @@ export default function FormFilter() {
       >
         <List classNames={{ itemWrapper: classes.input }}>
           <List.Item>
-            <Title order={3}>Отрасль</Title>
+            <Title order={3}>Categories</Title>
             <Select
-              placeholder="Выберете отрасль"
+              placeholder="Choose categories"
               rightSection={<IconChevronDown size="1rem" />}
               rightSectionWidth={30}
               styles={{ rightSection: { pointerEvents: 'none' } }}
@@ -89,11 +89,11 @@ export default function FormFilter() {
           </List.Item>
           <List.Item>
             <Group position="left" mt="md">
-              <Title order={3}>Оклад</Title>
+              <Title order={3}>Expected salary</Title>
             </Group>
             <NumberInput
               mb="0.5rem"
-              placeholder="От"
+              placeholder="From"
               min={0}
               max={paymentTo}
               value={paymentFrom}
@@ -101,7 +101,7 @@ export default function FormFilter() {
               classNames={{ control: classes.numberInputRight }}
             />
             <NumberInput
-              placeholder="До"
+              placeholder="To"
               min={paymentFrom}
               value={paymentTo}
               onChange={(e) => { dispatch(setFilters({ paymentTo: Number(e) })); }}
@@ -110,7 +110,7 @@ export default function FormFilter() {
           </List.Item>
         </List>
         <Group position="center" mt="md">
-          <Button type="submit" style={{ width: '100%' }}>Применить</Button>
+          <Button type="submit" style={{ width: '100%' }}>Apply</Button>
         </Group>
       </form>
     </Box>

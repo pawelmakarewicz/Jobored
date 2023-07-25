@@ -26,9 +26,9 @@ function showVacanciesList(vacancies) {
     return (
       <Flex mx="auto" maw={770} direction="column" align="center">
         <Image maw={300} mb="1rem" src="/emptyState.svg" alt="emptyState" />
-        <Text mb="1rem" fz="1.5rem">Упс, здесь еще ничего нет!</Text>
+        <Text mb="1rem" fz="1.5rem">Oops, there is nothing here yet!</Text>
         <Button component={Link} to="/">
-          <Text fz="xl">Поиск Вакансий</Text>
+          <Text fz="xl">Search for jobs</Text>
         </Button>
       </Flex>
     );
